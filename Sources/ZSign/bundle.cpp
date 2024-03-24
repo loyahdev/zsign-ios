@@ -4,6 +4,7 @@
 #include "sys/types.h"
 #include "common/base64.h"
 #include "common/common.h"
+#include "Includes/LoggingBridge.h"
 
 ZAppBundle::ZAppBundle()
 {
@@ -333,6 +334,7 @@ bool ZAppBundle::SignNode(JValue &jvNode)
 		{
 			const char *szFile = jvNode["files"][i].asCString();
 			ZLog::PrintV(">>> SignFile: \t%s\n", szFile);
+			logFromCpp(">>> Sign");
 			ZMachO macho;
 			if (!macho.InitV("%s/%s", m_strAppFolder.c_str(), szFile))
 			{
@@ -368,6 +370,7 @@ bool ZAppBundle::SignNode(JValue &jvNode)
 
 	string strExePath = strBaseFolder + "/" + strBundleExe;
 	ZLog::PrintV(">>> SignFolder: %s, (%s)\n", ("/" == strFolder) ? basename((char *)m_strAppFolder.c_str()) : strFolder.c_str(), strBundleExe.c_str());
+	logFromCpp(">>> Sign");
 
 	ZMachO macho;
 	if (!macho.Init(strExePath.c_str()))
@@ -644,6 +647,7 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 	}
 
 	ZLog::PrintV(">>> Signing: \t%s ...\n", m_strAppFolder.c_str());
+	logFromCpp(">>> Sign");
 	ZLog::PrintV(">>> AppName: \t%s\n", jvRoot["name"].asCString());
 	ZLog::PrintV(">>> BundleId: \t%s\n", jvRoot["bid"].asCString());
 	ZLog::PrintV(">>> BundleVer: \t%s\n", jvRoot["bver"].asCString());
